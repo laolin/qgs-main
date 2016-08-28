@@ -28,7 +28,8 @@ Domain Path: /languages
 */
 
 define( 'APPID' , 'wxfd48b9fdd7288012');
- 
+define('WX_KEY','weixin_unionid');
+
 /*
   function custom_login_message() {
     echo '';
@@ -165,7 +166,7 @@ function qgs_widget_loginstat_disp($args) {
   echo $args['before_widget'];
   echo $args['before_title'] . '高手帐户' .  $args['after_title'];
   // Print some HTML for the widget to display here.
-  echo '
+  $wx_login_str = '
       <div id="login_container_3"></div>
       <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
       <script>
@@ -183,8 +184,19 @@ function qgs_widget_loginstat_disp($args) {
           });
       </script>
   ';
-  
-  
+  $umeta=[];
+  if(is_user_logged_in()) {
+    $this_user = wp_get_current_user();
+    $umeta=get_user_meta($this_user->ID);
+  }
+  if(isset($umeta[WX_KEY])){//已登录，且是绑定微信的
+    echo "欢迎您，".$this_user->display_name."！<br/>";
+    wp_loginout();
+    echo "<img src='{$umeta[weixin_avatar][0]}'/>";
+    //echo 'ouid:<pre>';var_dump($this_user);echo '<hr/>';var_dump($umeta);echo '</pre>';
+  } else { 
+    echo $wx_login_str;
+  }
   echo $args['after_widget'];
 }
 
