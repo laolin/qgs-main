@@ -27,11 +27,15 @@ Domain Path: /languages
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+define( 'APPID' , 'wxfd48b9fdd7288012');
+ 
+/*
   function custom_login_message() {
     echo '';
   }
   add_action('login_form', 'custom_login_message');
 
+*/
 
 //自定义登录界面LOGO链接
 function custom_loginlogo_url($url) {
@@ -78,11 +82,11 @@ function my_custom_login_logo() {
       }
     </style>
       <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
-        <script  >
-        
-      console.log("QGS plugin loaded. OK. 40");
+      
+      <script>
+      console.log("QGS plugin loaded. OK. 41");
         //把登录窗口修改掉
-        document.addEventListener("DOMContentLoaded",function(){
+      document.addEventListener("DOMContentLoaded",function(){
         loginform=document.getElementById("loginform");
         var tab1= document.createElement("div");
         var ts1= document.createElement("div");
@@ -108,7 +112,7 @@ function my_custom_login_logo() {
 
         var obj = new WxLogin({
             id:"login_container_1", 
-            appid: "wxfd48b9fdd7288012", 
+            appid: "'. APPID   .'", 
             scope: "snsapi_login", 
             
             redirect_uri: "' . 
@@ -118,9 +122,12 @@ function my_custom_login_logo() {
             style: "",
             href: ""
           });
+      });
+      </script>
+      <script>
+      document.addEventListener("DOMContentLoaded",function(){
           sel_wx_login(1);
       });
-      
           function sel_wx_login(wx_param) {
             if ( typeof (sel_wx_login.w)===undefined  ){
               sel_wx_login.w=true;
@@ -154,6 +161,51 @@ function my_custom_login_logo() {
 }
 add_action('login_head', 'my_custom_login_logo');
 
+function qgs_widget_loginstat_disp($args) {
+  echo $args['before_widget'];
+  echo $args['before_title'] . '高手帐户' .  $args['after_title'];
+  // Print some HTML for the widget to display here.
+  echo '
+      <div id="login_container_3"></div>
+      <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+      <script>
+        var obj = new WxLogin({
+            id:"login_container_3", 
+            appid: "'. APPID   .'", 
+            scope: "snsapi_login", 
+            
+            redirect_uri: "' . 
+            urlencode(get_bloginfo("url")) .
+            '", 
+            state: "123",
+            style: "",
+            href: ""
+          });
+      </script>
+  ';
+  
+  
+  echo $args['after_widget'];
+}
+
+function qgs_widget_loginstat_new() {
+  $id='qgs-login-stat';
+  $name='高手帐户';
+  $options=[
+  
+    'description' => '请高手平台帐户面板'];
+    
+    
+  wp_register_sidebar_widget(
+      $id, 
+      $name, 
+      qgs_widget_loginstat_disp, 
+      $options
+  ); 
+}
+qgs_widget_loginstat_new();
+
+//echo '<h1>WWOWOWOW</h1>';
 
 /*
 
@@ -161,5 +213,6 @@ plugin_dir_path()
 plugins_url()
 
 */
+
 
 ?>
