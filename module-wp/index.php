@@ -8,7 +8,7 @@ $GLOBALS['cfg']=[
 ];
 //以上3个选项可以在index.site-config.php这个自定义文件中重定义
 // index.site-config.php 文件代码仓库中是没有的，需要自已新建，把上面几行拷过去，然后修改为正确的配置
-if ( file_exists( 'index.site-config.php' ) )
+//if ( file_exists( 'index.site-config.php' ) )
 	include_once(  'index.site-config.php' );
 
 //===================
