@@ -47,26 +47,13 @@ $GLOBALS['cfg']=[
 // index.site-config.php 文件代码仓库中是没有的，需要自已新建，把上面几行拷过去，然后修改为正确的配置
 ````
 
-### 添加微信扫描，登录wordpress的二维码
+### 安装微信扫描登录wordpress的插件`qgs-wechat-login`
 
-wp后台管理小工具，添加一项文本，内容如下：
+·plgin-qgs-wechat-login.php·是个登录wordpress的插件。
+它的功能有：
+- 修改wp默认的登录界面，显示微信扫描登录的二维码。
+- 创建一个“高手帐户”的widegt小工具，可显示微信扫描登录的二维码，或已登录的的用户信息。
 
-- 显示二维码的 代码：
-````
-	<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
-	<div id="login_container_1"></div>
-	<script  >
-	 var obj = new WxLogin({
-		  id:"login_container_1", 
-		  appid: "wxfd48b9fdd7288012", 
-		  scope: "snsapi_login", 
-		  redirect_uri: "http%3A%2F%2Fqgs.jdyhy.com",
-		  state: "123",
-		  style: "",
-		  href: ""
-		});
-	</script>
-````
 
 ### todo
 微信扫描登录后，还显示二维码，需要改进
