@@ -127,6 +127,7 @@ class WXPRESS{
         'user_login' => $login_name,
         'display_name' => $username,
         'user_pass' => $random_password,
+        'user_email'=>$user_info['unionid']. '@wechat',
         'nick_name' => $username
     );
     
