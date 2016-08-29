@@ -217,7 +217,39 @@ function qgs_widget_loginstat_new() {
 }
 qgs_widget_loginstat_new();
 
-//echo '<h1>WWOWOWOW</h1>';
+
+
+
+
+
+// Apply filter
+add_filter( 'get_avatar' , 'my_custom_avatar' , 1 , 5 );
+
+function my_custom_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+    $user = false;
+
+    if ( is_numeric( $id_or_email ) ) {
+        $id = (int) $id_or_email;
+        $user = get_user_by( 'id' , $id );
+
+    } elseif ( is_object( $id_or_email ) ) {
+        if ( ! empty( $id_or_email->user_id ) ) {
+            $id = (int) $id_or_email->user_id;
+            $user = get_user_by( 'id' , $id );
+        }
+
+    } else {
+        $user = get_user_by( 'email', $id_or_email );	
+    }
+
+    if ( $user && is_object( $user ) ) {
+      $umeta=get_user_meta($user->ID);
+      if(isset($umeta[WX_KEY])) {
+        $avatar = "<img src='{$umeta[weixin_avatar][0]}' width='{$size}' height='{$size}'/>";
+      }
+    }
+    return $avatar;
+}
 
 /*
 
