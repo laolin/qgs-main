@@ -245,7 +245,8 @@ function my_custom_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
     if ( $user && is_object( $user ) ) {
       $umeta=get_user_meta($user->ID);
       if(isset($umeta[WX_KEY])) {
-        $avatar = "<img src='{$umeta[weixin_avatar][0]}' width='{$size}' height='{$size}'/>";
+        $avatar = "<img src='{$umeta[weixin_avatar][0]}' width='{$size}' height='{$size}'
+        class='avatar avatar-{$size} photo'/>";
       }
     }
     return $avatar;
