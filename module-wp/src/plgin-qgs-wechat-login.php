@@ -85,7 +85,7 @@ function my_custom_login_logo() {
 
         var obj = new WxLogin({
             id:"login_container_1", 
-            appid: "'. APPID   .'", 
+            appid: "'. $GLOBALS['cfg']['WX_APPID']   .'", 
             scope: "snsapi_login", 
             
             redirect_uri: "' . 
