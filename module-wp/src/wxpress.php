@@ -4,7 +4,6 @@
 //require( dirname(__FILE__) . WP_DIR .'/wp-load.php' );   
 
 
-define('WX_KEY','weixin_unionid');
 define('SHOW_DEBUG_INFO',1);
 
 
