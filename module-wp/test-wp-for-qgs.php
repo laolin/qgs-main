@@ -8,7 +8,7 @@
  <?php
 
  //1, 先定义wordpress安装目录
-$define('WORDPRESS_PATH',$_SERVER['DOCUMENT_ROOT'] . '/wordpress'); // wp安装路径
+define('WORDPRESS_PATH',$_SERVER['DOCUMENT_ROOT'] . '/wordpress'); // wp安装路径
 
 
 //此行可删除，定义这个可显示一些DEBUG信息
