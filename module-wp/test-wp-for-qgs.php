@@ -8,15 +8,14 @@
  <?php
 
  //1, 先定义wordpress安装目录
-$GLOBALS['wp_cfg']=[
-'WP_PATH'=>'/data/wwwroot/linjp.cn/wordpress', // wp安装路径
-];
+$define('WORDPRESS_PATH',$_SERVER['DOCUMENT_ROOT'] . '/wordpress'); // wp安装路径
 
-//2, 定义 WX_KEY
-define('WX_KEY','weixin_unionid');
 
-//3, 引用共享文件
-require_once(  '../share-code/wordpress/wp-for-qgs-login.php' );
+//此行可删除，定义这个可显示一些DEBUG信息
+define('SHOW_DEBUG_INFO',1);
+
+//2, 引用共享文件
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/share-code/wordpress/qgs_share.php' );
 
 echo '<pre>';
 
@@ -29,8 +28,12 @@ $user_info=[
 ];
 var_dump($user_info);
 
-//4, 调用此函数
-$r=qgs_user_login($user_info);
+//3, 调用此函数
+$r=QgsShare::checkLoginUnionid();
+echo "(checkLoginUnionid return $r) ";
+
+//3, 调用此函数
+$r=QgsShare::loginByUserinfo($user_info);
 var_dump($r);
 
 
