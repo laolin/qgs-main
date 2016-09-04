@@ -30,9 +30,18 @@ class WXPRESS{
     if(!$weixin_id) wp_die('Error get access_token.');
 
     $v=WXPRESS::wx_login($user_info);
-    WXPRESS::dump($v);
-    WXPRESS::home();
     
+    WXPRESS::dump($v);
+    if($v['err_code']==0){
+      //执行请高手的代码
+      require_once("{$_SERVER['DOCUMENT_ROOT']}/share-code/qinggaoshou/wp_share.php");
+      $user_info['rqupdate']=time();
+      $saveWxUser  = WpShare::saveWxUser($user_info);
+      WXPRESS::dump($saveWxUser);
+      WXPRESS::home();
+    } else {
+      wp_die("Error # {$v[err_code]} :  {$v[err_msg]} ");
+    }
 }
 
 /*
