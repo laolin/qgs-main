@@ -34,6 +34,9 @@ class WXPRESS{
     WXPRESS::dump($v);
     if($v['err_code']==0){
       //执行请高手的代码
+      error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
+      ini_set("display_errors", 0);
+      ini_set("error_log", "php_errors.log");
       require_once("{$_SERVER['DOCUMENT_ROOT']}/share-code/qinggaoshou/wp_share.php");
       $user_info['rqupdate']=time();
       $saveWxUser  = WpShare::saveWxUser($user_info);
