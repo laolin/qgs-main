@@ -40,6 +40,7 @@ class WXPRESS{
       WXPRESS::dump($saveWxUser);
       WXPRESS::home();
     } else {
+      var_dump($user_info);
       wp_die("Error # {$v[err_code]} :  {$v[err_msg]} ");
     }
 }
