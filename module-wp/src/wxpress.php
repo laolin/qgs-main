@@ -35,6 +35,27 @@ class WXPRESS{
     
 }
 
+/*
+1 通过usermeta查一下当前的微信用户曾经扫描登录过没
+2 扫描过：
+   扫描过的用户为 $oauth_user
+   
+   2.1 是否有已登录wp用户   
+        且该用户的UID不同
+           【登出wp用户】
+	 2.2【登录$oauth_user用户，并更新用户信息】【完成】
+   
+
+
+3 第一次扫
+  3.1 有已登录wp用户
+     该用户没有绑定UID
+        【绑定UID】【完成】
+	   该用户有绑定UID
+        【肯定是不同的UID，故登出wp用户】
+  3.2 未登录
+  【新建】
+*/
   static public function wx_login($user_info){
   //unionid, openid, nickname, headimgurl 
   //sex city province country
@@ -48,7 +69,8 @@ class WXPRESS{
     //1 通过usermeta查一下当前的微信用户曾经扫描登录过没
     $oauth_user = get_users(array('meta_key'=>WX_KEY,'meta_value'=>$weixin_id));
 
-    //2 如果扫描登录过（不是第一次登录）
+    WXPRESS::dump($oauth_user,'1 通过usermeta查一下当前的微信用户曾经扫描登录过没');
+    //2 如果此UID有扫描登录过的记录
     if(!is_wp_error($oauth_user) && count($oauth_user)){    
       //2.1 目前已有登录用户
       if(is_user_logged_in()){
@@ -59,6 +81,7 @@ class WXPRESS{
 
         //2.1.1 目前登录用户的微信UID不同，把当前登录用户登出，避免扫描绑定到到不同的用户去
         if($ouid !== $weixin_id) {
+          WXPRESS::dump('2.1.1目前登录用户的微信UID不同，已登出');
           wp_logout();
         }
         //这样，第2.1过后，要么就是未登录用户，要么登录用户同微信扫描用户
@@ -72,30 +95,37 @@ class WXPRESS{
 
     }
     //3 如果没扫描登录过的记录（第一次扫描登录）
-    else {
-    
-      //3.1, 已登录用户，第一次扫描登录时，记录微信信息到当前用户的usermeta中
+    else {    
+      //3.1, 已有登录用户
       if(is_user_logged_in()){
         WXPRESS::dump('3.1, 已登录用户，第一次扫描登录时');
         $this_user = wp_get_current_user();
-        WXPRESS::wx_savemeta($user_info,$this_user->ID);
-        return WXPRESS::msg(0,'OK2. (uid='.$this_user->ID.')新绑定到旧wp用户');
-      }
-      
-      //3.2, 未登录，第一次扫描登录时，新建用户（并自动登录），然后记录微信信息到当前用户的usermeta中
-      else {
-        WXPRESS::dump('3.2, 未登录，第一次扫描登录');
-        $user_id = WXPRESS::new_user($user_info);
-        if(is_wp_error($user_id)){
-          wp_die('Error create user.');
-          return WXPRESS::msg(1003,'Error create user.');
-        }
-        //wp_signon(array('user_login'=>$login_name,'user_password'=>$random_password),false);
-        wp_set_auth_cookie($user_id);
+        $ouid=get_user_meta($this_user->ID,WX_KEY,true);
+        WXPRESS::dump($ouid,'ouid');
 
-        WXPRESS::wx_savemeta($user_info,$user_id);
-        return WXPRESS::msg(0,'OK3. (uid='.$user_id.')新用户绑定到新建wp用户成功');
+        //3.1.1 目前登录用户 未绑定微信UID
+        //绑定之，记录微信信息到当前用户的usermeta中
+        if( '' == $ouid ) {
+          WXPRESS::dump('3.1.1, 目前登录用户 未绑定微信UID');
+          WXPRESS::wx_savemeta($user_info,$this_user->ID);
+          return WXPRESS::msg(0,'OK2. (uid='.$this_user->ID.')新绑定到旧wp用户');
+        }
+        
+        //3.1.2 目前登录用户 已绑定了微信UID, 则肯定是不同的UID
+        wp_logout();
       }
+      WXPRESS::dump('3.2 开始新建用户');
+      $user_id = WXPRESS::new_user($user_info);
+      if(is_wp_error($user_id)){
+        //wp_die('Error create user.');
+        return WXPRESS::msg(1003,'Error create user.');
+      }
+      //wp_signon(array('user_login'=>$login_name,'user_password'=>$random_password),false);
+      wp_set_auth_cookie($user_id);
+
+      WXPRESS::wx_savemeta($user_info,$user_id);
+      return WXPRESS::msg(0,'OK3. (uid='.$user_id.')新用户绑定到新建wp用户成功');
+      
     }
 	}
   
