@@ -3,8 +3,8 @@
 //注意，引用此文件之前，需要先引用wordpress的wp-load.php文件，例如：
 //require( dirname(__FILE__) . WP_DIR .'/wp-load.php' );   
 
-
-define('SHOW_DEBUG_INFO',1);
+if(!defined('SHOW_DEBUG_INFO'))
+  define('SHOW_DEBUG_INFO',0);
 
 
 class WXPRESS{
@@ -16,8 +16,8 @@ class WXPRESS{
     WXPRESS::dump($code,'code');
 
     //2, 根据code，换回 access_token 
-    $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $GLOBALS['cfg']['WX_APPID'] . '&secret=' . $GLOBALS['cfg']['WX_APPSECRET'] . '&code=' . $code . '&grant_type=authorization_code';
-    WXPRESS::dump($GLOBALS['cfg'],'GLOBALS.cfg');
+    $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $GLOBALS['wp_cfg']['WX_APPID'] . '&secret=' . $GLOBALS['wp_cfg']['WX_APPSECRET'] . '&code=' . $code . '&grant_type=authorization_code';
+    WXPRESS::dump($GLOBALS['wp_cfg'],'GLOBALS.cfg');
     $json_token = json_decode(file_get_contents($url),true);
     WXPRESS::dump($json_token,'json_token');
 
@@ -40,9 +40,9 @@ class WXPRESS{
   //sex city province country
   
     if(!isset($user_info['unionid']))
-      return wp_die('missing unionid');
+      return WXPRESS::msg(101,'missing unionid');
     if(!isset($user_info['nickname']))
-      return wp_die('missing nickname');
+      return WXPRESS::msg(102,'missing nickname');
     $weixin_id = $user_info['unionid'];
     
     //1 通过usermeta查一下当前的微信用户曾经扫描登录过没
@@ -68,7 +68,7 @@ class WXPRESS{
       WXPRESS::dump('2.2登录为当前微信扫描用户');
       wp_set_auth_cookie($oauth_user[0]->ID);
       WXPRESS::wx_savemeta($user_info,$oauth_user[0]->ID);
-      return WXPRESS::msg(201,'201');
+      return WXPRESS::msg(0,'OK1. 原有绑定用户.');
 
     }
     //3 如果没扫描登录过的记录（第一次扫描登录）
@@ -79,7 +79,7 @@ class WXPRESS{
         WXPRESS::dump('3.1, 已登录用户，第一次扫描登录时');
         $this_user = wp_get_current_user();
         WXPRESS::wx_savemeta($user_info,$this_user->ID);
-        return WXPRESS::msg(301);
+        return WXPRESS::msg(0,'OK2. 新绑定到旧wp用户');
       }
       
       //3.2, 未登录，第一次扫描登录时，新建用户（并自动登录），然后记录微信信息到当前用户的usermeta中
@@ -94,7 +94,7 @@ class WXPRESS{
         wp_set_auth_cookie($user_id);
 
         WXPRESS::wx_savemeta($user_info,$user_id);
-        return WXPRESS::msg(302);
+        return WXPRESS::msg(0,'OK3. 新用户绑定到新建wp用户成功');
       }
     }
 	}
