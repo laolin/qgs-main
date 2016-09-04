@@ -27,7 +27,8 @@ Domain Path: /languages
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-include_once(  'index.site-config.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . 
+    '/share-code/wordpress/index.site-config.php' );
 
 require_once ( 'src/plgin-qgs-wechat-login.php' ); 
 
