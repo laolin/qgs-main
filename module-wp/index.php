@@ -9,9 +9,9 @@ define('WP_USE_THEMES', true);
 
 if(!isset($_GET['code'])) {
   /* Loads the WordPress */
-  require($GLOBALS['cfg']['WP_PATH'] . '/wp-blog-header.php');
+  require($GLOBALS['wp_cfg']['WP_PATH'] . '/wp-blog-header.php');
 } else {
-  require_once( $GLOBALS['cfg']['WP_PATH'] . '/wp-load.php' ); 
+  require_once( $GLOBALS['wp_cfg']['WP_PATH'] . '/wp-load.php' ); 
   require_once ( 'src/wxpress.php' );  
 
   $code = $_GET['code'];
