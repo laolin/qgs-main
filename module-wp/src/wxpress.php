@@ -167,7 +167,7 @@ class WXPRESS{
         'user_login' => $login_name,
         'display_name' => $username,
         'user_pass' => $random_password,
-        'user_email'=>$user_info['unionid']. '@wechat-qgs-auto.info',
+        'user_email'=>$user_info['unionid']. '@'.time().'.qgs',
         'nick_name' => $username
     );
     
