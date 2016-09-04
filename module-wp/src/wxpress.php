@@ -68,7 +68,7 @@ class WXPRESS{
       WXPRESS::dump('2.2登录为当前微信扫描用户');
       wp_set_auth_cookie($oauth_user[0]->ID);
       WXPRESS::wx_savemeta($user_info,$oauth_user[0]->ID);
-      return WXPRESS::msg(0,'OK1. 原有绑定用户.');
+      return WXPRESS::msg(0,'OK1. (uid='.$oauth_user[0]->ID.')原有绑定用户.');
 
     }
     //3 如果没扫描登录过的记录（第一次扫描登录）
@@ -79,7 +79,7 @@ class WXPRESS{
         WXPRESS::dump('3.1, 已登录用户，第一次扫描登录时');
         $this_user = wp_get_current_user();
         WXPRESS::wx_savemeta($user_info,$this_user->ID);
-        return WXPRESS::msg(0,'OK2. 新绑定到旧wp用户');
+        return WXPRESS::msg(0,'OK2. (uid='.$this_user->ID.')新绑定到旧wp用户');
       }
       
       //3.2, 未登录，第一次扫描登录时，新建用户（并自动登录），然后记录微信信息到当前用户的usermeta中
@@ -94,7 +94,7 @@ class WXPRESS{
         wp_set_auth_cookie($user_id);
 
         WXPRESS::wx_savemeta($user_info,$user_id);
-        return WXPRESS::msg(0,'OK3. 新用户绑定到新建wp用户成功');
+        return WXPRESS::msg(0,'OK3. (uid='.$user_id.')新用户绑定到新建wp用户成功');
       }
     }
 	}
