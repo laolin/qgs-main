@@ -1,5 +1,6 @@
 <?php
-require_once( $GLOBALS['wp_cfg']['WP_PATH'] . '/wp-load.php' ); 
+require_once( WORDPRESS_PATH . '/wp-load.php' ); 
+define('WX_KEY','weixin_unionid');
 require_once ( 'src/wxpress.php' );  
 
  
