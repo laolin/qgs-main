@@ -127,6 +127,7 @@ class WXPRESS{
       WXPRESS::dump('3.2 开始新建用户');
       $user_id = WXPRESS::new_user($user_info);
       if(is_wp_error($user_id)){
+        WXPRESS::dump($user_id,'user_id');
         //wp_die('Error create user.');
         return WXPRESS::msg(1003,'Error create user.');
       }
