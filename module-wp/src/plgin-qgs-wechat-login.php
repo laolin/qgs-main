@@ -85,7 +85,7 @@ function my_custom_login_logo() {
 
         var obj = new WxLogin({
             id:"login_container_1", 
-            appid: "'. $GLOBALS['cfg']['WX_APPID']   .'", 
+            appid: "'. $GLOBALS['wp_cfg']['WX_APPID']   .'", 
             scope: "snsapi_login", 
             
             redirect_uri: "' . 
@@ -144,7 +144,7 @@ function qgs_widget_loginstat_disp($args) {
       <script>
         var obj = new WxLogin({
             id:"login_container_3", 
-            appid: "'. $GLOBALS['cfg']['WX_APPID']   .'", 
+            appid: "'. $GLOBALS['wp_cfg']['WX_APPID']   .'", 
             scope: "snsapi_login", 
             
             redirect_uri: "' . 
